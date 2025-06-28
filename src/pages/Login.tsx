@@ -26,8 +26,9 @@ const Login = () => {
       await login(email, password);
       toast.success('Login successful!');
       navigate(from, { replace: true });
-    } catch (error) {
-      toast.error('Invalid credentials. Try admin@civiclens.com / citizen@civiclens.com');
+    } catch (error: any) {
+      console.error('Login failed:', error);
+      toast.error(error.message || 'Login failed. Please check your credentials.');
     } finally {
       setIsSubmitting(false);
     }
@@ -58,13 +59,11 @@ const Login = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                Forgot password?
-              </Link>
             </div>
             <Input 
               id="password" 
               type="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -93,13 +92,6 @@ const Login = () => {
                 Register
               </Link>
             </p>
-          </div>
-          
-          <div className="text-center text-sm text-muted-foreground">
-            <p>Demo credentials:</p>
-            <p>Admin: admin@civiclens.com</p>
-            <p>Citizen: citizen@civiclens.com</p>
-            <p>(any password works)</p>
           </div>
         </form>
       </div>

@@ -25,15 +25,25 @@ const Register = () => {
       toast.error('Passwords do not match');
       return;
     }
+
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return;
+    }
     
     setIsSubmitting(true);
     
     try {
       await register(name, email, password);
-      toast.success('Registration successful!');
-      navigate('/');
-    } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      toast.success('Registration successful! Please check your email to confirm your account.');
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Registration failed:', error);
+      if (error.message.includes('already registered')) {
+        toast.error('An account with this email already exists. Please sign in instead.');
+      } else {
+        toast.error(error.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -78,6 +88,7 @@ const Register = () => {
             <Input 
               id="password" 
               type="password"
+              placeholder="Enter password (min 6 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -91,6 +102,7 @@ const Register = () => {
             <Input 
               id="confirmPassword" 
               type="password"
+              placeholder="Confirm your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
