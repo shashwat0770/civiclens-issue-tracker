@@ -24,8 +24,9 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   
+  const isCollapsed = state === "collapsed";
   const isActive = (path: string) => location.pathname === path;
 
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
@@ -34,12 +35,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex min-h-screen w-full">
-      <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible>
+      <Sidebar className={isCollapsed ? "w-14" : "w-60"} collapsible="icon">
         <SidebarTrigger className="m-2 self-end" />
         
         <SidebarContent>
-          <div className={`flex items-center justify-center py-4 ${collapsed ? 'px-2' : 'px-6'}`}>
-            {!collapsed ? (
+          <div className={`flex items-center justify-center py-4 ${isCollapsed ? 'px-2' : 'px-6'}`}>
+            {!isCollapsed ? (
               <Link to="/" className="flex items-center space-x-2">
                 <MapPin className="h-6 w-6 text-primary" />
                 <span className="text-xl font-bold">CivicLens</span>
@@ -51,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             )}
           </div>
 
-          <SidebarGroup defaultOpen>
+          <SidebarGroup>
             <SidebarGroupLabel>Main Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -59,7 +60,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <SidebarMenuButton asChild>
                     <Link to="/" className={getNavCls({ isActive: isActive('/') })}>
                       <Home className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>Dashboard</span>}
+                      {!isCollapsed && <span>Dashboard</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -68,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <SidebarMenuButton asChild>
                     <Link to="/explore" className={getNavCls({ isActive: isActive('/explore') })}>
                       <Search className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>Explore Issues</span>}
+                      {!isCollapsed && <span>Explore Issues</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -77,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <SidebarMenuButton asChild>
                     <Link to="/report" className={getNavCls({ isActive: isActive('/report') })}>
                       <Flag className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>Report Issue</span>}
+                      {!isCollapsed && <span>Report Issue</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -87,7 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <SidebarMenuButton asChild>
                       <Link to="/admin" className={getNavCls({ isActive: isActive('/admin') })}>
                         <Settings className="mr-2 h-4 w-4" />
-                        {!collapsed && <span>Admin Panel</span>}
+                        {!isCollapsed && <span>Admin Panel</span>}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -96,7 +97,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarGroup defaultOpen>
+          <SidebarGroup>
             <SidebarGroupLabel>Account</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -104,7 +105,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <SidebarMenuButton asChild>
                     <Link to="/profile" className={getNavCls({ isActive: isActive('/profile') })}>
                       <User className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>Profile</span>}
+                      {!isCollapsed && <span>Profile</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -116,7 +117,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       className="w-full flex items-center p-2 rounded-md hover:bg-muted/50"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>Logout</span>}
+                      {!isCollapsed && <span>Logout</span>}
                     </button>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

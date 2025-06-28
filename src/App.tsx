@@ -27,7 +27,7 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <IssueProvider>
-          <SidebarProvider collapsedWidth={56}>
+          <SidebarProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
